@@ -1,0 +1,73 @@
+@import '_variables';
+
+.v-app-bar {
+	z-index: 1 !important;
+}
+
+$spcr: 16px;
+$spcrs: (
+	1: $spcr * 0.25,
+	2: $spcr * 0.5,
+	3: $spcr,
+	4: $spcr * 1.5,
+	5: $spcr * 3,
+	6: $spcr * 4,
+	7: $spcr * 5,
+	8: $spcr * 6
+);
+
+@each $i, $v in $spcrs {
+	.offset-t-#{$i} {
+		top: ($v * -1) !important;
+		position: relative;
+	}
+
+	.offset-b-#{$i} {
+		bottom: $v !important;
+		position: relative;
+	}
+
+	.offset-l-#{$i} {
+		left: ($v * -1) !important;
+		position: relative;
+	}
+
+	.offset-r-#{$i} {
+		right: $v !important;
+		position: relative;
+	}
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition-duration: 0.3s;
+	transition-property: opacity;
+	transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+	opacity: 0;
+}
+
+.bounce-enter-active {
+	animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+	animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+	0% {
+		transform: scale(0);
+	}
+	50% {
+		transform: scale(1.2);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
