@@ -4,6 +4,7 @@ import users from './modules/users';
 import vouchers from './modules/vouchers';
 import voucherGroups from './modules/voucher-groups';
 import plans from './modules/plans';
+import vips from './modules/vips';
 
 Vue.use(Vuex);
 
@@ -12,7 +13,8 @@ export default new Vuex.Store({
 		users,
 		vouchers,
 		voucherGroups,
-		plans
+		plans,
+		vips
 	},
 	state: {
 		page: {},

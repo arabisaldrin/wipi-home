@@ -69,15 +69,23 @@
           </v-layout>
           <v-list-group v-else-if="item.children" :key="item.text" v-model="item.model">
             <template v-slot:activator>
-              <v-list-item>
+              <v-list-item class="pl-0">
+                <v-list-item-icon>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>{{ item.text }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <v-list-item v-for="(child, i) in item.children" :key="i" :to="child.route">
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              :to="child.route"
+              style="border-left : 2px solid var(--v-primary-base)"
+            >
               <v-list-item-icon v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
+                <v-icon small>{{ child.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>{{ child.text }}</v-list-item-title>

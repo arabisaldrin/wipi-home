@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
         '/users' => 'UserController',
         '/vouchers' => 'VoucherController',
         '/plans' => 'PlanController',
+        '/vips' => 'VipController',
     ]);
 
     Route::get('/voucher-groups', 'VoucherController@groups');

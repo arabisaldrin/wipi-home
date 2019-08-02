@@ -7,7 +7,18 @@ export default [
 	{
 		text: 'Users',
 		icon: 'mdi-account-group',
-		route: '/users'
+		children: [
+			{
+				text: 'Subscriber',
+				icon: 'mdi-credit-card',
+				route: '/users'
+			},
+			{
+				text: 'VIP',
+				icon: 'mdi-account-badge-horizontal-outline',
+				route: '/vip'
+			}
+		]
 	},
 	/* {
 		text: 'Advertisements',
