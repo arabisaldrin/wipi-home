@@ -20,7 +20,6 @@
             continue.</strong>
     </noscript>
     <div id="app"></div>
-    <script src="/js/ChilliLibrary.js"></script>
     <script src="{{mix('/js/app.js')}}"></script>
 </body>
 
