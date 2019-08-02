@@ -28,6 +28,7 @@
                 name="Email"
                 label="Email"
                 prepend-inner-icon="mdi-account"
+                @keypress.enter="submit"
               ></v-text-field>
               <v-text-field
                 type="password"
@@ -37,6 +38,7 @@
                 name="Password"
                 label="Password"
                 prepend-inner-icon="mdi-shield-lock-outline"
+                @keypress.enter="submit"
               ></v-text-field>
             </v-flex>
             <v-flex class="layout justify-center">
@@ -64,10 +66,7 @@ import { mapActions } from "vuex";
 export default {
   layout: "empty",
   data: () => ({
-    formData: {
-      //   email: "arabis.aldrin@yandex.com",
-      //   password: "arabis"
-    },
+    formData: {},
     loading: false
   }),
   methods: {
@@ -78,9 +77,7 @@ export default {
         try {
           await this.login(this.formData);
           this.$router.replace("/");
-        } catch (ex) {
-          console.log(ex);
-        }
+        } catch (ex) {}
       }
     },
     ...mapActions(["login"])

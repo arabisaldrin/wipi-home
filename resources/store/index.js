@@ -4,6 +4,7 @@ import users from './modules/users';
 import vouchers from './modules/vouchers';
 import voucherGroups from './modules/voucher-groups';
 import plans from './modules/plans';
+import VueToast from 'vue-toast-notification';
 
 Vue.use(Vuex);
 
@@ -41,14 +42,7 @@ export default new Vuex.Store({
 				if (data.api_token) {
 					app.$cookie.set('api_token', data.api_token, { expires: '1m' });
 				}
-			} catch (ex) {
-				console.log(ex);
-			}
-		},
-		async logout() {
-			await axios.get('/logout');
-			app.$cookie.delete('api_token');
-			window.location.reload();
+			} catch (e) {}
 		}
 	}
 });

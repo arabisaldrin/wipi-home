@@ -24,13 +24,6 @@ Vue.use(PortalVue);
 Vue.use(VueMoment);
 Vue.use(VueCookie);
 
-Vue.use({
-	async install(Vue, options) {
-		const { data } = await axios.get('/me');
-		Vue.prototype.$user = data;
-	}
-});
-
 window.app = new Vue({
 	store,
 	router,

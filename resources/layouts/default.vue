@@ -39,35 +39,10 @@
           </v-list>
         </v-card>
       </v-menu>
-      <v-menu offset-y offset-x left :close-on-content-click="false">
-        <template v-slot:activator="{on}">
-          <v-avatar size="30" color="primary" v-on="on">
-            <img src="@/assets/avatars/default.svg" />
-          </v-avatar>
-        </template>
-        <v-card>
-          <v-list>
-            <v-list-item>
-              <v-list-item-avatar>
-                <img src="@/assets/avatars/default.svg" />
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title>{{$user.name}}</v-list-item-title>
-                <v-list-item-subtitle>{{$user.email}}</v-list-item-subtitle>
-              </v-list-item-content>
-
-              <v-list-item-action>
-                <v-btn icon @click="logout">
-                  <v-icon color="red">mdi-logout-variant</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-menu>
+      <v-btn icon href="/logout">
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
     </v-app-bar>
-    <!-- :value="drawer || $vuetify.breakpoint.lgAndUp" -->
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" app>
       <v-fade-transition>
         <div class="layout justify-center py-2 align-center" v-show="drawer && !miniVariant">
@@ -121,13 +96,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-content>
-      <!-- v-show="materialHeader" -->
       <div
         class="material-panel-header"
         :class="page.scheme"
         :style="`height : ${page.panelHeight}`"
       ></div>
-      <!-- <div class="material-panel-header" :class="scheme"></div> -->
       <router-view></router-view>
     </v-content>
     <v-footer app class="font-weight-medium">
@@ -162,7 +135,6 @@ export default {
     ...mapState(["page"])
   },
   methods: {
-    ...mapActions(["logout"]),
     toggleDrawer() {
       if (this.$vuetify.breakpoint.lgAndUp) {
         this.drawer = true;
