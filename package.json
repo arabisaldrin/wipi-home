@@ -39,7 +39,6 @@
         "vue-router": "^3.0.3",
         "vue-router-layout": "^0.1.4",
         "vue-template-compiler": "^2.6.10",
-        "vue-toast-notification": "^0.0.2",
         "vuetify": "^2.0.0",
         "vuex": "^3.0.1"
     }

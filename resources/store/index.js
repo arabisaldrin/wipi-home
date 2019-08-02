@@ -4,7 +4,6 @@ import users from './modules/users';
 import vouchers from './modules/vouchers';
 import voucherGroups from './modules/voucher-groups';
 import plans from './modules/plans';
-import VueToast from 'vue-toast-notification';
 
 Vue.use(Vuex);
 
