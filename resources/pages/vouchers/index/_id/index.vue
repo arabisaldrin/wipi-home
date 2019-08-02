@@ -63,11 +63,13 @@ export default {
     },
     ...mapState({
       plans: s => s.plans.lists
+    }),
+    ...mapGetters({
+      find: "vouchers/find"
     })
   },
   async created() {
-    const { data } = await axios.get(`/vouchers/${this.voucherId}`);
-    this.formData = data;
+    this.formData = await this.find(this.voucherId);
     this.getPlans();
   },
   methods: {

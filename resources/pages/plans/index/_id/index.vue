@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import attrMixin from "@/js/mixins/attribute-mixin";
 export default {
   mixins: [attrMixin],
@@ -108,12 +108,14 @@ export default {
   computed: {
     planId() {
       return this.$route.params.id;
-    }
+    },
+    ...mapGetters({
+      find: "plans/find"
+    })
   },
   async created() {
-    const { data } = await axios.get(`/plans/${this.planId}`);
-    this.convertFrom(data);
-    this.formData = data;
+    this.formData = await this.find(this.planId);
+    this.convertFrom(this.formData);
   },
   methods: {
     checkInput(e) {

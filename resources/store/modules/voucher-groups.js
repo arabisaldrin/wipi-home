@@ -7,6 +7,13 @@ export default {
 		options: {},
 		totalGroups: 0
 	},
+	getters: {
+		find(_) {
+			return async id => {
+				return (await axios.get(`/voucher-groups/${id}`)).data;
+			};
+		}
+	},
 	mutations: {
 		set(state, lists) {
 			state.lists.splice(0, state.lists.length, ...lists);
