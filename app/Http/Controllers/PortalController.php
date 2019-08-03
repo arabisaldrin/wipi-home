@@ -8,6 +8,8 @@ use App\Radusergroup;
 use App\User;
 use App\Voucher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class PortalController extends Controller
 {
@@ -21,15 +23,40 @@ class PortalController extends Controller
         $voucher = Voucher::active()->where('code', $request->voucher)->first();
 
         if ($voucher) {
-            $plan = $voucher->plan()->first();
-            Radusergroup::create([
-                'username' => $request->mac,
-                'groupname' => $plan->code,
-            ]);
+            if ($voucher->used_at) {
+                // get generated password
+                $radcheck = Radcheck::where('username', $request->mac)
+                    ->where('attribute', 'Cleartext-Password')
+                    ->first();
+
+            } else {
+                // if not used create voucher connection details
+
+                // get voucher plan
+                $plan = $voucher->plan()->first();
+
+                $radcheck = Radcheck::create([
+                    'username' => $request->mac,
+                    'attribute' => 'Cleartext-Password',
+                    'op' => ':=',
+                    'value' => Str::random(20),
+                ]);
+                // Add this voucher to radusergroup
+                Radusergroup::create([
+                    'username' => $request->mac,
+                    'groupname' => $plan->code,
+                ]);
+                // update voucher used_at timestamp
+                $voucher->used_at = Carbon::now();
+                $voucher->save();
+            }
+
             return response()->json([
                 'status' => 1,
-                'message' => 'Connected',
-                'plan' => $plan,
+                'message' => 'Valid',
+                'login' => [
+                    'password' => $radcheck->value,
+                ],
             ]);
         } else {
             return response()->json([
