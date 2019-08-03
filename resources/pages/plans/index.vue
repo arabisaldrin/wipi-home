@@ -1,10 +1,10 @@
 <template>
   <page title="Plans" scheme="cyan">
     <template slot="tools">
-      <v-btn x-small fab color="primary" to="add" append>
+      <v-btn small fab color="primary" to="add" append>
         <v-icon>mdi-plus</v-icon>
       </v-btn>
-      <v-btn x-small fab dark color="green" class="ml-2">
+      <v-btn small fab dark color="green" class="ml-2">
         <v-icon>mdi-printer</v-icon>
       </v-btn>
     </template>
