@@ -20,13 +20,21 @@
                 </v-btn>
               </v-layout>
             </v-flex>
+            <v-alert type="error" v-model="failed">
+              Login failed
+              <template v-slot:close="{toggle}  ">
+                <v-icon @click="toggle">mdi-close-circle</v-icon>
+              </template>
+            </v-alert>
             <v-flex>
               <v-text-field
+                type="email"
                 v-model="formData.email"
-                v-validate="'required'"
+                v-validate="'required|email'"
                 :error-messages="errors.collect('Email')"
                 name="Email"
                 label="Email"
+                data-vv-validate-on="blur"
                 prepend-inner-icon="mdi-account"
                 @keypress.enter="submit"
               ></v-text-field>
@@ -67,17 +75,22 @@ export default {
   layout: "empty",
   data: () => ({
     formData: {},
-    loading: false
+    loading: false,
+    failed: false
   }),
   methods: {
     async submit() {
+      this.failed = false;
       const valid = await this.$validator.validateAll();
       if (valid) {
         this.loading = true;
         try {
           await this.login(this.formData);
           this.$router.replace("/");
-        } catch (ex) {}
+        } catch (ex) {
+          this.failed = true;
+          this.loading = false;
+        }
       }
     },
     ...mapActions(["login"])
