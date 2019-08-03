@@ -11,6 +11,7 @@
         <v-tab :class="{'error--text' : errors.any()}">Login</v-tab>
         <v-tab>User Info</v-tab>
         <v-tab>Subscription</v-tab>
+        <v-tab>Devices</v-tab>
       </v-tabs>
     </template>
     <v-tabs-items v-model="tab">
@@ -84,6 +85,44 @@
           return-object
         ></v-select>
       </v-tab-item>
+      <v-tab-item>
+        <v-alert
+          type="info"
+          :value="true"
+        >Associating device(s) will restrict connection only to this device(s)</v-alert>
+        <v-checkbox
+          :disabled="hasDevice"
+          label="Auto connect?"
+          v-model="formData.auto_connect"
+          hide-details
+        ></v-checkbox>
+        <v-list>
+          <v-list-item class="pa-0" v-for="(device,i) in formData.devices" :key="i">
+            <v-layout row>
+              <v-flex grow>
+                <v-text-field
+                  :disabled="(i+1) !== formData.devices.length"
+                  v-model="device.mac_address"
+                  label="Mac address"
+                ></v-text-field>
+              </v-flex>
+              <v-flex shrink>
+                <v-btn
+                  icon
+                  v-if="(i+1) === formData.devices.length"
+                  :disabled="!device.mac_address"
+                  @click="formData.devices.push({})"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+                <v-btn icon v-else @click="formData.devices.splice(i,1)">
+                  <v-icon color="red">mdi-delete</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-list-item>
+        </v-list>
+      </v-tab-item>
     </v-tabs-items>
     <template v-slot:actions="{close,accept}">
       <v-btn :disabled="loading" text class="mx-1" @click="close">Cancel</v-btn>
@@ -105,7 +144,12 @@ export default {
       loading: false,
       formData: {
         check: {},
-        reply: {}
+        reply: {},
+        devices: [
+          {
+            mac_address: ""
+          }
+        ]
       },
       cap: undefined,
       speed: undefined,
@@ -122,11 +166,16 @@ export default {
     }),
     userId() {
       return this.$route.params.id;
+    },
+    hasDevice() {
+      return !this.formData.devices.filter(e => !!e.mac_address).length;
     }
   },
   async created() {
     await this.getPlans();
-    this.formData = await this.find(this.userId);
+    const data = await this.find(this.userId);
+    data.devices.push({});
+    this.formData = data;
   },
   methods: {
     ...mapActions({

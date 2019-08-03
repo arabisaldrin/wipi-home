@@ -17,6 +17,7 @@ class User extends Model
         'last_name',
         'email_address',
         'mobile_number',
+        'auto_connect',
     ];
 
     public function check()
@@ -37,5 +38,10 @@ class User extends Model
     public function group()
     {
         return $this->belongsTo(Radusergroup::class, 'username', 'username');
+    }
+
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
     }
 }

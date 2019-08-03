@@ -36,12 +36,10 @@ export default new Vuex.Store({
 	},
 	actions: {
 		async login(_, payload) {
-			try {
-				const { data } = await axios.post('/login', payload);
-				if (data.api_token) {
-					app.$cookie.set('api_token', data.api_token, { expires: '1m' });
-				}
-			} catch (e) {}
+			const { data } = await axios.post('/login', payload);
+			if (data.api_token) {
+				app.$cookie.set('api_token', data.api_token, { expires: '1m' });
+			}
 		}
 	}
 });

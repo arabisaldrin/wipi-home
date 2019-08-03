@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $builder = User::query();
+        $builder = User::with('devices');
         return Pagination::paginate($builder, $request);
     }
 
@@ -43,6 +43,11 @@ class UserController extends Controller
         $user->plan_id = $request->plan['id'];
         $user->save();
 
+        $user->devices()->delete();
+        $user->devices()->createMany(array_filter($request->devices, function ($item) {
+            return !empty($item['mac_address']);
+        }));
+
         // add user to group/plan
         Radusergroup::updateOrCreate([
             'username' => $oldUsername,
@@ -57,7 +62,7 @@ class UserController extends Controller
                 $type = ['App\\Radcheck', 'App\\Radreply'][$index];
                 if (empty($val)) {
                     $type::where([
-                        'user_name' => $oldUsername,
+                        'username' => $oldUsername,
                         'attribute' => $attr,
                     ])->delete();
                     continue;
@@ -82,8 +87,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $check = [];
-        $reply = [];
+        $check = ['none' => ''];
+        $reply = ['none' => ''];
         DB::table('radcheck')
             ->where('username', $user->username)
             ->get()->each(function ($item) use (&$check) {
@@ -98,7 +103,7 @@ class UserController extends Controller
 
         $user->check = $check;
         $user->reply = $reply;
-        $user->load('plan');
+        $user->load('plan', 'devices');
 
         return response()->json($user);
     }
@@ -117,17 +122,24 @@ class UserController extends Controller
         return $user;
     }
 
+    /**
+     * Activate/Deactivate user
+     */
     public function toggleStatus(User $user)
     {
         $user->is_active = !$user->is_active;
         $user->save();
     }
 
+    /**
+     * Destroy user and all related object
+     */
     public function destroy(User $user)
     {
         $user->check()->delete();
         $user->reply()->delete();
         $user->group()->delete();
+        $user->devices()->delete();
         $user->delete();
     }
 }

@@ -15,6 +15,7 @@ import VueCookie from 'vue-cookie';
 import router from './router';
 import vuetify from '@/plugins/vuetify';
 import store from '@/store/index';
+import i18n from '@/i18n';
 
 import '@/components/global';
 import '@/assets/style/app.scss';
@@ -28,5 +29,6 @@ window.app = new Vue({
 	store,
 	router,
 	vuetify,
+	i18n,
 	render: h => h('router-view')
 }).$mount('#app');
