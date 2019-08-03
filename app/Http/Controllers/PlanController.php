@@ -14,7 +14,9 @@ class PlanController extends Controller
      */
     public function index(Request $request)
     {
-        $builder = Plan::query();
+        $builder = Plan::withCount(['users' => function ($q) {
+            return $q->where('is_active', 1);
+        }]);
         return Pagination::paginate($builder, $request);
     }
 

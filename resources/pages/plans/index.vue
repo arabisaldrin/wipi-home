@@ -53,7 +53,8 @@ export default {
           value: "description"
         },
         {
-          text: "Active User"
+          text: "Active User",
+          value: "users_count"
         },
         {
           text: "Actions",

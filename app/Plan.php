@@ -19,4 +19,8 @@ class Plan extends Model
         return $this->hasMany(Radgroupreply::class, 'groupname', 'code');
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
