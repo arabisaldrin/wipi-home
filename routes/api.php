@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 
 Route::post('/portal/voucher', 'PortalController@receiveVoucher');
+Route::get('/portal/auto-connect', 'PortalController@checkAutoConnectDevice');
+Route::get('/portal/device-access', 'PortalController@checkDeviceAccess');
 
 Route::middleware('auth')->group(function () {
     Route::get('/me', function (Request $request) {
