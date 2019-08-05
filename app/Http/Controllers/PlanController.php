@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Plan;
+use App\VoucherGroup;
 use Illuminate\Http\Request;
 
 class PlanController extends Controller
@@ -108,5 +109,6 @@ class PlanController extends Controller
         $plan->delete();
         $plan->reply()->delete();
         $plan->check()->delete();
+        VoucherGroup::where('plan_id', $plan->id)->delete();
     }
 }
