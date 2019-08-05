@@ -4,7 +4,36 @@ export default {
 			dailyTime: null,
 			sessionTime: null,
 			speed: null,
-			cap: null
+			cap: null,
+			map: [
+				/**
+				 * Coova-Chilli attribute mapping for auto conversion
+				 */
+				{
+					type: 'check',
+					prop: 'cap',
+					attr: 'CoovaChilli-Max-Total-Octets',
+					conversion: 1000000
+				},
+				{
+					type: 'reply',
+					prop: 'speed',
+					attr: 'WISPr-Bandwidth-Max-Down',
+					conversion: 8000000
+				},
+				{
+					type: 'check',
+					prop: 'dailyTime',
+					attr: 'Max-Daily-Session',
+					conversion: 60
+				},
+				{
+					type: 'reply',
+					prop: 'sessionTime',
+					attr: 'Session-Timeout',
+					conversion: 60
+				}
+			]
 		};
 	},
 	methods: {
@@ -16,29 +45,18 @@ export default {
 				data.reply = {};
 			}
 
-			if (data.reply['CoovaChilli-Max-Total-Octets'])
-				this.cap = data.reply['CoovaChilli-Max-Total-Octets'] / 1000000;
-			if (data.reply['WISPr-Bandwidth-Max-Down']) this.speed = data.reply['WISPr-Bandwidth-Max-Down'] / 8000000;
-			if (data.reply['Max-Daily-Session']) this.dailyTime = data.reply['Max-Daily-Session'] / 60;
-			if (data.reply['Session-Timeout']) this.sessionTime = data.reply['Session-Timeout'] / 60;
+			this.map.forEach(e => {
+				if (data[e.type][e.attr]) {
+					this[e.prop] = data[e.type][e.attr] / e.conversion;
+				}
+			});
 		}
 	},
-	watch: {
-		dailyTime(val) {
-			// sec to min
-			this.formData.reply['Max-Daily-Session'] = val * 60;
-		},
-		sessionTime(val) {
-			// sec to min
-			this.formData.reply['Session-Timeout'] = val * 60;
-		},
-		speed(val) {
-			// bit -> mb
-			this.formData.reply['WISPr-Bandwidth-Max-Down'] = val * 8000000;
-		},
-		cap(val) {
-			// octet (byte) -> mb
-			this.formData.reply['CoovaChilli-Max-Total-Octets'] = val * 1000000;
-		}
+	created() {
+		this.map.forEach(e => {
+			this.$watch(e.prop, val => {
+				this.formData[e.type][e.attr] = val * e.conversion;
+			});
+		});
 	}
 };
