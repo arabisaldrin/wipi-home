@@ -84,7 +84,7 @@ class PortalController extends Controller
 
             return response()->json([
                 'status' => 1,
-                'message' => 'Valid',
+                'message' => 'Voucher valid and connecting..',
                 'login' => [
                     'password' => $radcheck->value,
                 ],
