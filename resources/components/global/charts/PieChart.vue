@@ -1,16 +1,16 @@
 <script>
-import { Pie } from 'vue-chartjs'
+import { Pie } from "vue-chartjs";
 
 export default {
   extends: Pie,
   props: {
     chartData: {
       default: () => ({
-        labels: ['Blue', 'Red', 'Green'],
+        labels: ["Request", "Conencted", "Invalid"],
         datasets: [
           {
             data: [40, 39, 10],
-            backgroundColor: ['#df323b', '#4CAF50']
+            backgroundColor: ["#2196f3", "#4caf50", "#4caf50"]
           }
         ]
       })
@@ -20,25 +20,25 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          position: 'right'
+          position: "right"
         }
       })
     }
   },
   mounted() {
     const gradient = this.$refs.canvas
-      .getContext('2d')
-      .createLinearGradient(0, 0, 0, 450)
+      .getContext("2d")
+      .createLinearGradient(0, 0, 0, 450);
 
-    gradient.addColorStop(0, 'rgba(255, 0,0, 0.5)')
-    gradient.addColorStop(0.5, 'rgba(255, 0, 0, 0.25)')
-    gradient.addColorStop(1, 'rgba(255, 0, 0, 0)')
+    gradient.addColorStop(0, "rgba(255, 0,0, 0.5)");
+    gradient.addColorStop(0.5, "rgba(255, 0, 0, 0.25)");
+    gradient.addColorStop(1, "rgba(255, 0, 0, 0)");
 
-    this.chartData.datasets[0].backgroundColor.splice(0,0,gradient)
+    this.chartData.datasets[0].backgroundColor.splice(0, 0, gradient);
 
-    this.renderChart(this.chartData, this.chartOption)
+    this.renderChart(this.chartData, this.chartOption);
   }
-}
+};
 </script>
 
 <style>

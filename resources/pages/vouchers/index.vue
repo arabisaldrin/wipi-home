@@ -196,8 +196,8 @@ export default {
           value: "code"
         },
         {
-          text: "Expiration",
-          value: "expiration"
+          text: "Used",
+          value: "used_at"
         },
         {
           text: "Created Date",

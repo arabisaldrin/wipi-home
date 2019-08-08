@@ -23,6 +23,14 @@ Route::middleware('auth')->group(function () {
         return $request->user();
     });
 
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/user-count', 'AnalyticsController@userCount');
+        Route::get('/voucher-count', 'AnalyticsController@voucherCount');
+        Route::get('/data-usage', 'AnalyticsController@dataUsage');
+        Route::get('/monthly-trends', 'AnalyticsController@monthlyTrends');
+        Route::get('/annual-trends', 'AnalyticsController@annualTrends');
+    });
+
     Route::apiResources([
         '/users' => 'UserController',
         '/vouchers' => 'VoucherController',

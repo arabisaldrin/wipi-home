@@ -1,24 +1,28 @@
 <template>
   <div>
-    <v-card class="mt-4 pa-0">
+    <v-card class="mt-4 pa-0" style="height: 133px">
       <v-layout row wrap ml-2 pr-3>
         <v-flex shrink>
           <v-sheet class="offset-t-4" :color="color" elevation="12">
-            <v-icon dark size="40" class="ma-3">md {{icon}}</v-icon>
+            <slot name="icon">
+              <v-icon dark size="40" class="ma-3">{{icon}}</v-icon>
+            </slot>
           </v-sheet>
         </v-flex>
         <v-spacer></v-spacer>
         <v-flex shrink class="text-xs-right" pa-3>
-          <p class="category grey--text font-weight-light" v-text="title"/>
+          <p class="category grey--text font-weight-light" v-text="title" />
           <h3 class="title display-1 font-weight-light">
-            {{ value }}
+            <slot>{{ value }}</slot>
             <small>{{ smallValue }}</small>
           </h3>
         </v-flex>
       </v-layout>
       <v-card-actions>
         <v-icon :color="subIconColor" size="20" class="mr-2">{{ subIcon }}</v-icon>
-        <span :class="subTextColor" class="caption font-weight-light" v-text="subText"/>
+        <span :class="subTextColor" class="caption font-weight-light">
+          <slot name="sub-text">{{subText}}</slot>
+        </span>
       </v-card-actions>
     </v-card>
   </div>
@@ -64,5 +68,5 @@ export default {
       default: undefined
     }
   }
-}
+};
 </script>
