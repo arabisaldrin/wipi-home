@@ -5,7 +5,7 @@
         <v-flex shrink>
           <v-sheet class="offset-t-4" :color="color" elevation="12">
             <slot name="icon">
-              <v-icon dark size="40" class="ma-3">{{icon}}</v-icon>
+              <v-icon dark size="40" class="ma-3">{{ icon }}</v-icon>
             </slot>
           </v-sheet>
         </v-flex>
@@ -19,10 +19,13 @@
         </v-flex>
       </v-layout>
       <v-card-actions>
-        <v-icon :color="subIconColor" size="20" class="mr-2">{{ subIcon }}</v-icon>
+        <!--  <v-icon :color="subIconColor" size="20" class="mr-2">{{ subIcon }}</v-icon>
         <span :class="subTextColor" class="caption font-weight-light">
           <slot name="sub-text">{{subText}}</slot>
-        </span>
+        </span> -->
+        <select name="" id="" placeholder="sdsd">
+          <option value="asdsd"></option>
+        </select>
       </v-card-actions>
     </v-card>
   </div>

@@ -59,8 +59,12 @@ class AnalyticsController extends Controller
 
         return [
             'labels' => $dates,
-            'usage' => $data->map(function ($e) {return $e->total_usage;}),
-            'connection' => $data->map(function ($e) {return $e->connection;}),
+            'usage' => $data->map(function ($e) {
+                return $e->total_usage;
+            }),
+            'connection' => $data->map(function ($e) {
+                return $e->connection;
+            }),
         ];
     }
 
@@ -86,8 +90,12 @@ class AnalyticsController extends Controller
 
         return [
             'labels' => $months,
-            'usage' => $data->map(function ($e) {return $e->total_usage;}),
-            'connection' => $data->map(function ($e) {return $e->connection;}),
+            'usage' => $data->map(function ($e) {
+                return $e->total_usage;
+            }),
+            'connection' => $data->map(function ($e) {
+                return $e->connection;
+            }),
         ];
     }
 }

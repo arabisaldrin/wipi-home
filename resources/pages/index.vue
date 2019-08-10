@@ -11,7 +11,12 @@
           <v-layout row wrap>
             <v-flex sm6 xs12 md6 lg3>
               <stats-card color="green" icon="mdi-account-group" title="Users">
-                <template>{{userCount.active}} /{{userCount.total}} Active</template>
+                <template
+                  >{{ userCount.active || 0 }}/{{
+                    userCount.total
+                  }}
+                  Active</template
+                >
               </stats-card>
             </v-flex>
             <v-flex sm6 xs12 md6 lg3>
@@ -33,7 +38,7 @@
                 </template>
                 <template>
                   <v-icon small>mdi-arrow-up</v-icon>
-                  {{dataUsage.download | fix2}} GB
+                  {{ dataUsage.download | fix2 }} GB
                 </template>
               </stats-card>
             </v-flex>
@@ -56,7 +61,7 @@
                 </template>
                 <template>
                   <v-icon small>mdi-arrow-down</v-icon>
-                  {{dataUsage.upload | fix2}} GB
+                  {{ dataUsage.upload | fix2 }} GB
                 </template>
               </stats-card>
             </v-flex>
@@ -71,7 +76,7 @@
               >
                 <template slot="sub-text">
                   Last used -
-                  <router-link to="#">{{voucherCount.last}}</router-link>
+                  <router-link to="#">{{ voucherCount.last }}</router-link>
                 </template>
               </stats-card>
             </v-flex>
@@ -80,11 +85,7 @@
         <v-flex>
           <v-layout row wrap>
             <v-flex md8 lg8>
-              <v-card>
-                <v-card-text>
-                  <line-chart :chart-data="monthlyTrends" style="height : 230px"></line-chart>
-                </v-card-text>
-              </v-card>
+              <monthly-trends />
             </v-flex>
             <v-flex md4 lg4>
               <v-card>
@@ -94,11 +95,7 @@
               </v-card>
             </v-flex>
             <v-flex xs12>
-              <v-card>
-                <v-card-text>
-                  <bar-chart :chart-data="annualTrends" style="height : 230px"></bar-chart>
-                </v-card-text>
-              </v-card>
+              <annual-trends />
             </v-flex>
           </v-layout>
         </v-flex>
@@ -109,6 +106,8 @@
 
 <script>
 import StatsCard from "@/components/dashboard/StatsCard";
+import MonthlyTrends from "@/components/dashboard/MonthlyTrends";
+import AnnualTrends from "@/components/dashboard/AnnualTrends";
 
 export default {
   filters: {
@@ -117,7 +116,9 @@ export default {
     }
   },
   components: {
-    StatsCard
+    StatsCard,
+    MonthlyTrends,
+    AnnualTrends
   },
   data() {
     return {
@@ -126,10 +127,6 @@ export default {
       dataUsage: {
         upload: 0,
         download: 0
-      },
-      monthlyTrends: {
-        labels: [],
-        datasets: []
       },
       annualTrends: {
         labels: [],
@@ -141,67 +138,16 @@ export default {
     const [
       { data: userCount },
       { data: voucherCount },
-      { data: dataUsage },
-      { data: monthlyTrends },
-      { data: annualTrends }
+      { data: dataUsage }
     ] = await Promise.all([
       axios.get("/dashboard/user-count"),
       axios.get("/dashboard/voucher-count"),
-      axios.get("/dashboard/data-usage"),
-      axios.get("/dashboard/monthly-trends"),
-      axios.get("/dashboard/annual-trends")
+      axios.get("/dashboard/data-usage")
     ]);
 
     this.userCount = userCount;
     this.voucherCount = voucherCount;
     this.dataUsage = dataUsage;
-
-    const redOption = {
-      borderColor: "#FC2525",
-      pointBackgroundColor: "white",
-      borderWidth: 1,
-      pointBorderColor: "white"
-    };
-    const blueOption = {
-      borderColor: "#05CBE1",
-      pointBackgroundColor: "white",
-      pointBorderColor: "white",
-      borderWidth: 1
-    };
-
-    this.monthlyTrends = {
-      labels: monthlyTrends.labels,
-      datasets: [
-        {
-          label: "Data Usage (GB)",
-          data: monthlyTrends.usage,
-          ...redOption
-        },
-        {
-          label: "Connections",
-          data: monthlyTrends.connection,
-          ...blueOption
-        }
-      ]
-    };
-
-    annualTrends.labels = this.annualTrends = {
-      labels: annualTrends.labels.map(e =>
-        this.$moment(`2000-${e}-01`).format("MMM")
-      ),
-      datasets: [
-        {
-          label: "Data Usage (GB)",
-          data: annualTrends.usage,
-          ...redOption
-        },
-        {
-          label: "Connections",
-          data: annualTrends.connection,
-          ...blueOption
-        }
-      ]
-    };
   }
 };
 </script>
