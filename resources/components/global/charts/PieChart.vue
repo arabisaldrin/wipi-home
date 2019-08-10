@@ -6,7 +6,7 @@ export default {
   props: {
     chartData: {
       default: () => ({
-        labels: ["Request", "Conencted", "Invalid"],
+        labels: ["Red", "Conencted", "Invalid"],
         datasets: [
           {
             data: [40, 39, 10],
@@ -25,16 +25,27 @@ export default {
       })
     }
   },
-  mounted() {
-    const gradient = this.$refs.canvas
-      .getContext("2d")
-      .createLinearGradient(0, 0, 0, 450);
+  methods: {
+    createGradient(r, g, b) {
+      const gradient = this.$refs.canvas
+        .getContext("2d")
+        .createLinearGradient(0, 0, 0, 450);
 
-    gradient.addColorStop(0, "rgba(255, 0,0, 0.5)");
-    gradient.addColorStop(0.5, "rgba(255, 0, 0, 0.25)");
-    gradient.addColorStop(1, "rgba(255, 0, 0, 0)");
+      [[0, 0.5], [0.5, 0.25], [1, 0]].forEach(e => {
+        gradient.addColorStop(e[0], `rgba(${r}, ${g},${b}, ${e[1]})`);
+      });
+
+      return gradient;
+    }
+  },
+  mounted() {
+    const gradient = this.createGradient(255, 0, 0);
+    const gradient2 = this.createGradient(0, 231, 255);
+    const gradient3 = this.createGradient(33, 150, 243);
 
     this.chartData.datasets[0].backgroundColor.splice(0, 0, gradient);
+    this.chartData.datasets[0].backgroundColor.splice(1, 0, gradient2);
+    this.chartData.datasets[0].backgroundColor.splice(1, 0, gradient3);
 
     this.renderChart(this.chartData, this.chartOption);
   }
