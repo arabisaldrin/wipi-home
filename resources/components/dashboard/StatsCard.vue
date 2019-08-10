@@ -19,13 +19,10 @@
         </v-flex>
       </v-layout>
       <v-card-actions>
-        <!--  <v-icon :color="subIconColor" size="20" class="mr-2">{{ subIcon }}</v-icon>
-        <span :class="subTextColor" class="caption font-weight-light">
-          <slot name="sub-text">{{subText}}</slot>
-        </span> -->
-        <select name="" id="" placeholder="sdsd">
-          <option value="asdsd"></option>
-        </select>
+        <v-icon :color="subIconColor" size="20" class="mr-2">{{ subIcon }}</v-icon>
+        <slot name="sub-text">
+          <span :class="subTextColor" class="caption font-weight-light">{{subText}}</span>
+        </slot>
       </v-card-actions>
     </v-card>
   </div>
