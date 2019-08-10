@@ -18,43 +18,38 @@
             :options.sync="options"
             item-key="id"
           >
-            <template v-slot:item="{item}">
-              <tr :class="{'grey--text':!item.is_active}">
-                <td v-text="item.username"></td>
-                <td v-text="(item.first_name || '') + ' ' + (item.last_name || '')"></td>
-                <td v-text="item.email_address"></td>
-                <td></td>
-                <td v-text="item.is_active ? 'Active' : 'Inactive'"></td>
-                <td>
-                  <v-btn
-                    x-small
-                    :disabled="!item.is_active"
-                    fab
-                    dark
-                    color="primary"
-                    :to="`${item.id}`"
-                    append
-                  >
-                    <v-icon small dark>mdi-pencil</v-icon>
-                  </v-btn>
-                  <v-btn
-                    x-small
-                    fab
-                    dark
-                    class="mx-1"
-                    :color="item.is_active ? 'red' : 'green'"
-                    @click="toggleStatus(item.id)"
-                  >
-                    <v-icon
-                      small
-                      dark
-                    >{{item.is_active? 'mdi-account-off-outline' : 'mdi-account-check-outline'}}</v-icon>
-                  </v-btn>
-                  <v-btn x-small fab dark color="red" @click="removeUser(item.id)">
-                    <v-icon small dark>mdi-trash-can</v-icon>
-                  </v-btn>
-                </td>
-              </tr>
+            <template
+              v-slot:item.name="{item}"
+            >{{(item.first_name || '') + ' ' + (item.last_name || '')}}</template>
+            <template v-slot:item.status="{item}">{{item.is_active ? 'Active' : 'Inactive'}}</template>
+            <template v-slot:item.actions="{item}">
+              <v-btn
+                x-small
+                :disabled="!item.is_active"
+                fab
+                dark
+                color="primary"
+                :to="`${item.id}`"
+                append
+              >
+                <v-icon small dark>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn
+                x-small
+                fab
+                dark
+                class="mx-1"
+                :color="item.is_active ? 'red' : 'green'"
+                @click="toggleStatus(item.id)"
+              >
+                <v-icon
+                  small
+                  dark
+                >{{item.is_active? 'mdi-account-off-outline' : 'mdi-account-check-outline'}}</v-icon>
+              </v-btn>
+              <v-btn x-small fab dark color="red" @click="removeUser(item.id)">
+                <v-icon small dark>mdi-trash-can</v-icon>
+              </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -71,22 +66,28 @@ export default {
     return {
       headers: [
         {
-          text: "Username"
+          text: "Username",
+          value: "username"
         },
         {
-          text: "Name"
+          text: "Name",
+          value: "name"
         },
         {
-          text: "Email"
+          text: "Email",
+          value: "email_address"
         },
         {
-          text: "Plan"
+          text: "Plan",
+          value: "plan.code"
         },
         {
-          text: "Status"
+          text: "Status",
+          value: "syayis"
         },
         {
           text: "",
+          value: "actions",
           width: "150px"
         }
       ],
