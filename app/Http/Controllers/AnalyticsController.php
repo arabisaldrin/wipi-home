@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -27,14 +28,25 @@ class AnalyticsController extends Controller
         return response()->json($result);
     }
 
-    public function dataUsage()
+    public function dataUsage(Request $request)
     {
-        $result = DB::table('radacct')
-            ->selectRaw("sum(acctoutputoctets) / 1000000000 as download,sum(acctinputoctets) / 1000000000 as upload")
-            ->whereDate('acctstarttime', '>=', Carbon::now()->subDay(2))
-            ->first();
+        $type = $request->type;
+        $date = $request->date;
 
-        return response()->json($result);
+        $date = $date ? $date : Carbon::now();
+
+        if ($type == 'download') {
+            $column = 'acctoutputoctets';
+        } else {
+            $column = 'acctinputoctets';
+        }
+
+        $result = DB::table('radacct')
+            ->whereDate('acctstarttime', '>=', $date)
+            ->selectRaw("ifnull(sum($column) / 1000000000,0) as total")
+            ->first()->total;
+
+        return $result;
     }
 
     public function monthlyTrends()
