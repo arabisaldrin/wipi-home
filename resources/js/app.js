@@ -25,6 +25,10 @@ Vue.use(PortalVue);
 Vue.use(VueMoment);
 Vue.use(VueCookie);
 
+Vue.filter('fix2', val => {
+	return Number(val).toFixed(2);
+});
+
 window.app = new Vue({
 	store,
 	router,
