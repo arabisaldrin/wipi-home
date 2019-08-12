@@ -24,9 +24,7 @@
       <v-icon small class @click="refresh">mdi-refresh</v-icon>
     </template>
     <template slot="icon">
-      <div
-        style="height: 100%; position: absolute; width: 100%; justify-content: center; display: flex;"
-      >
+      <div class="icon-overlay">
         <v-icon small class="absolute">mdi-download</v-icon>
       </div>
       <v-icon dark size="40" class="ma-3">{{loading ? 'mdi-loading mdi-spin' : 'mdi-chart-donut'}}</v-icon>
@@ -85,3 +83,12 @@ export default {
   }
 };
 </script>
+<style>
+.icon-overlay {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+</style>
