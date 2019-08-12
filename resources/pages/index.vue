@@ -35,8 +35,10 @@
                 sub-icon="mdi-update"
               >
                 <template slot="sub-text">
-                  Last used -
-                  <router-link to="#">{{ voucherCount.last }}</router-link>
+                  <span class="caption font-weight-light">
+                    Last used -
+                    <router-link to="#">{{ voucherCount.last }}</router-link>
+                  </span>
                 </template>
               </stats-card>
             </v-flex>
