@@ -92,7 +92,7 @@ export default {
         this.loading = true;
         try {
           await this.login(this.formData);
-          this.$router.replace("/");
+          window.location.href = "/";
         } catch (ex) {
           this.failed = true;
           this.loading = false;
