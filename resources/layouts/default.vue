@@ -176,8 +176,11 @@ export default {
         .notification(notification => {
           this.pushNotifcation(notification);
         })
-        .listen(".notification-read", e => {
+        .listen(".NotificationRead", e => {
           this.notificationRead(e.notification);
+        })
+        .listen(".LoggedOut", e => {
+          window.location.href = "/login";
         });
     }
   }

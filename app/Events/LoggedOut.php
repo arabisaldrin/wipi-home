@@ -5,24 +5,24 @@ namespace App\Events;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationRead implements ShouldBroadcast
+class LoggedOut implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $notification;
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($notification)
+    public function __construct($user)
     {
-        $this->notification = $notification;
+        $this->user = $user;
     }
 
     /**
@@ -32,11 +32,11 @@ class NotificationRead implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.Operator.' . $this->notification->notifiable_id);
+        return new PrivateChannel('App.Operator.' . $this->user->id);
     }
 
     public function broadcastAs()
     {
-        return 'NotificationRead';
+        return 'LoggedOut';
     }
 }

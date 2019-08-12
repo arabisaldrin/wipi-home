@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\LoggedOut;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class LoginController extends Controller
@@ -55,6 +58,20 @@ class LoginController extends Controller
     protected function sendFailedLoginResponse($request)
     {
         return response('Login Faield', 401);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        // broadcast logout event
+        broadcast(new LoggedOut($user))->toOthers();
+
+        return $this->loggedOut($request) ?: redirect('/');
     }
 
     /**
