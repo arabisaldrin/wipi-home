@@ -74,7 +74,13 @@ import { mapActions } from "vuex";
 export default {
   layout: "empty",
   data: () => ({
-    formData: {},
+    formData:
+      process.env.NODE_ENV === "development"
+        ? {
+            email: "arabis.aldrin@yandex.com",
+            password: "arabis"
+          }
+        : {},
     loading: false,
     failed: false
   }),
