@@ -65,6 +65,6 @@ class LoginController extends Controller
      */
     protected function loggedOut($request)
     {
-        return response()->json(true);
+        return redirect('/login');
     }
 }

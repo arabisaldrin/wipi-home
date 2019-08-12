@@ -11,6 +11,7 @@ import PortalVue from 'portal-vue';
 import VeeValidate from 'vee-validate';
 import VueMoment from 'vue-moment';
 import VueCookie from 'vue-cookie';
+import Echo from 'laravel-echo';
 
 import router from './router';
 import vuetify from '@/plugins/vuetify';
@@ -29,10 +30,17 @@ Vue.filter('fix2', val => {
 	return Number(val).toFixed(2);
 });
 
-window.app = new Vue({
-	store,
-	router,
-	vuetify,
-	i18n,
-	render: h => h('router-view')
-}).$mount('#app');
+(async () => {
+	try {
+		const { data } = await axios.get(`/me`);
+		Vue.prototype.$user = data;
+	} catch (err) {}
+
+	window.app = new Vue({
+		store,
+		router,
+		vuetify,
+		i18n,
+		render: h => h('router-view')
+	}).$mount('#app');
+})();

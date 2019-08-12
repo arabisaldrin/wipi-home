@@ -37,6 +37,10 @@ Route::middleware('auth')->group(function () {
         '/plans' => 'PlanController',
     ]);
 
+    Route::get('notifications/unread', 'NotificationController@unreadCount');
+    Route::post('notifications/{notification}/read', 'NotificationController@markAdRead');
+    Route::apiResource('notifications', 'NotificationController')->only('index', 'show', 'destroy');
+
     Route::get('/voucher-groups', 'VoucherController@groups');
     Route::post('/voucher-groups/archive', 'VoucherController@archive');
 

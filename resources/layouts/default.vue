@@ -13,10 +13,13 @@
       <v-btn medium fab text>
         <v-icon>mdi-heart</v-icon>
       </v-btn>
-      <v-menu offset-y left :close-on-content-click="false">
+      <v-menu offset-y left :close-on-content-click="false" min-width="300">
         <template v-slot:activator="{ on }">
           <v-btn medium fab text v-on="on">
-            <v-icon>mdi-bell-outline</v-icon>
+            <v-badge left color="orange">
+              <span slot="badge" v-text="unreadNotificationCount"></span>
+              <v-icon>mdi-bell-outline</v-icon>
+            </v-badge>
           </v-btn>
         </template>
 
@@ -24,19 +27,23 @@
           <v-card-title class="pa-2">
             <span class="caption grey--text">Notification</span>
           </v-card-title>
-          <v-list dense class="pt-0">
-            <notification actions title="Title" content="Content"></notification>
-            <v-list-item v-for="i in 3" :key="i" @click.stop>
-              <v-list-item-icon>
-                <v-avatar size="30">
-                  <img src="@/assets/avatars/default.svg" />
-                </v-avatar>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Notification {{ i }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+          <v-divider></v-divider>
+          <vue-custom-scrollbar class="scroll-area" :settings="{maxScrollbarLength : 60}">
+            <v-list dense class="pt-0">
+              <template v-for="(notification,i) in notifications">
+                <notification
+                  :key="notification.id"
+                  :value="notification"
+                  title="Title"
+                  content="Content"
+                ></notification>
+                <v-divider :key="`divier_${i}`"></v-divider>
+              </template>
+              <router-link to="/notifications">
+                <div class="text-center py-1 mt-2">View all</div>
+              </router-link>
+            </v-list>
+          </vue-custom-scrollbar>
         </v-card>
       </v-menu>
       <v-btn icon href="/logout">
@@ -103,6 +110,7 @@
       ></div>
       <router-view></router-view>
     </v-content>
+    <span v-html="sample"></span>
     <v-footer app class="font-weight-medium">
       <v-flex text-xs-right>
         <v-icon>mdi-settings</v-icon>
@@ -120,21 +128,38 @@
 import menu from "@/js/menu";
 import { mapState, mapActions } from "vuex";
 import Notification from "@/components/Notification";
+import VueCustomScrollbar from "vue-custom-scrollbar";
 export default {
   components: {
-    Notification
+    Notification,
+    VueCustomScrollbar
   },
   data() {
     return {
       menu,
       drawer: true,
-      miniVariant: false
+      miniVariant: false,
+      sample: `<router-link to="sample">Sample</router-link>`
     };
   },
   computed: {
-    ...mapState(["page"])
+    ...mapState({
+      page: state => state.page,
+      notifications: state => state.notifications.lists,
+      unreadNotificationCount: state => state.notifications.unreadCount
+    })
+  },
+  created() {
+    this.getNotifications();
+    this.listenForEvents();
   },
   methods: {
+    ...mapActions({
+      getNotifications: "notifications/fetch",
+      readNotifcation: "notifications/markRead",
+      pushNotifcation: "notifications/push",
+      notificationRead: "notifications/read"
+    }),
     toggleDrawer() {
       if (this.$vuetify.breakpoint.lgAndUp) {
         this.drawer = true;
@@ -143,6 +168,17 @@ export default {
         this.miniVariant = false;
         this.drawer = !this.drawer;
       }
+    },
+    listenForEvents() {
+      const Echo = window.Echo;
+
+      Echo.private("App.Operator." + this.$user.id)
+        .notification(notification => {
+          this.pushNotifcation(notification);
+        })
+        .listen(".notification-read", e => {
+          this.notificationRead(e.notification);
+        });
     }
   }
 };
@@ -164,5 +200,11 @@ export default {
   width: 100%;
   top: 0;
   z-index: 0;
+}
+.scroll-area {
+  position: relative;
+  margin: auto;
+  width: 300px;
+  height: 400px;
 }
 </style>

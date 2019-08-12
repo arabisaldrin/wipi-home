@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import users from './modules/users';
 import vouchers from './modules/vouchers';
 import voucherGroups from './modules/voucher-groups';
+import notifications from './modules/notifications';
 import plans from './modules/plans';
 import VueCookie from 'vue-cookie';
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
 		users,
 		vouchers,
 		voucherGroups,
+		notifications,
 		plans
 	},
 	state: {

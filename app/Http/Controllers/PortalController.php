@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Device;
+use App\Notifications\VoucherUsed;
+use App\Operator;
 use App\Radcheck;
 use App\Radgroupcheck;
 use App\Radusergroup;
@@ -11,6 +13,7 @@ use App\Voucher;
 use App\VoucherLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class PortalController extends Controller
@@ -81,6 +84,10 @@ class PortalController extends Controller
                 'ssid' => $request->ssid,
                 'nasid' => $request->nasid,
             ]);
+
+            $operators = Operator::all();
+
+            Notification::send($operators, new VoucherUsed($voucher));
 
             return response()->json([
                 'status' => 1,
