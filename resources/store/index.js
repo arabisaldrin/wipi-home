@@ -4,6 +4,7 @@ import users from './modules/users';
 import vouchers from './modules/vouchers';
 import voucherGroups from './modules/voucher-groups';
 import plans from './modules/plans';
+import VueCookie from 'vue-cookie';
 
 Vue.use(Vuex);
 
@@ -38,7 +39,7 @@ export default new Vuex.Store({
 		async login(_, payload) {
 			const { data } = await axios.post('/login', payload);
 			if (data.api_token) {
-				app.$cookie.set('api_token', data.api_token, { expires: '1m' });
+				VueCookie.set('api_token', data.api_token, { expires: '2h' });
 			}
 		}
 	}
