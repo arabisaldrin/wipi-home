@@ -1,7 +1,12 @@
 <template>
   <v-app app>
-    <v-app-bar app :flat="!page.scrolling" dark :class="page.scheme">
-      <div :class="`header-panel-overlay ${page.scheme}`"></div>
+    <v-app-bar
+      app
+      :flat="!page.scrolling"
+      dark
+      :class="page.scrolling? page.scheme  :'transparent'"
+    >
+      <!-- <div :class="`header-panel-overlay ${page.scrolling? page.scheme : 'transparent'}`"></div> -->
       <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
       <v-fade-transition>
         <span v-show="page.scrolling" v-text="page.title"></span>
@@ -9,9 +14,6 @@
       <v-spacer></v-spacer>
       <v-btn medium fab text>
         <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-      <v-btn medium fab text>
-        <v-icon>mdi-heart</v-icon>
       </v-btn>
       <v-menu offset-y left :close-on-content-click="false" min-width="300">
         <template v-slot:activator="{ on }">
@@ -108,9 +110,16 @@
         :class="page.scheme"
         :style="`height : ${page.panelHeight}`"
       ></div>
-      <router-view></router-view>
+      <transition
+        :name="transitionName"
+        mode="out-in"
+        @beforeLeave="beforeLeave"
+        @enter="enter"
+        @afterEnter="afterEnter"
+      >
+        <router-view></router-view>
+      </transition>
     </v-content>
-    <span v-html="sample"></span>
     <v-footer app class="font-weight-medium">
       <v-flex text-xs-right>
         <v-icon>mdi-settings</v-icon>
@@ -129,6 +138,9 @@ import menu from "@/js/menu";
 import { mapState, mapActions } from "vuex";
 import Notification from "@/components/Notification";
 import VueCustomScrollbar from "vue-custom-scrollbar";
+
+const DEFAULT_TRANSITION = "slide";
+
 export default {
   components: {
     Notification,
@@ -139,7 +151,7 @@ export default {
       menu,
       drawer: true,
       miniVariant: false,
-      sample: `<router-link to="sample">Sample</router-link>`
+      transitionName: DEFAULT_TRANSITION
     };
   },
   computed: {
@@ -150,15 +162,49 @@ export default {
     })
   },
   created() {
+    this.$router.beforeEach((to, from, next) => {
+      let transitionName =
+        to.meta.transitionName ||
+        from.meta.transitionName ||
+        DEFAULT_TRANSITION;
+
+      if (transitionName === "slide") {
+        const toDepth = to.path.split("/").length;
+        const fromDepth = from.path.split("/").length;
+        transitionName = toDepth < fromDepth ? "slide-right" : "slide-left";
+      }
+
+      this.transitionName = transitionName;
+
+      next();
+    });
+
     this.getNotifications();
     this.listenForEvents();
   },
   methods: {
+    beforeLeave(element) {
+      this.prevHeight = getComputedStyle(element).height;
+    },
+    enter(element) {
+      const { height } = getComputedStyle(element);
+
+      element.style.height = this.prevHeight;
+
+      setTimeout(() => {
+        element.style.height = height;
+      });
+    },
+    afterEnter(element) {
+      element.style.height = "auto";
+    },
+
     ...mapActions({
       getNotifications: "notifications/fetch",
       readNotifcation: "notifications/markRead",
       pushNotifcation: "notifications/push",
-      notificationRead: "notifications/read"
+      notificationRead: "notifications/read",
+      reloadVouchers: "voucherGroups/fetch"
     }),
     toggleDrawer() {
       if (this.$vuetify.breakpoint.lgAndUp) {
@@ -179,8 +225,11 @@ export default {
         .listen(".NotificationRead", e => {
           this.notificationRead(e.notification);
         })
-        .listen(".LoggedOut", e => {
+        .listen(".LoggedOut", _ => {
           window.location.href = "/login";
+        })
+        .listen(".VoucherGroupAdded", _ => {
+          this.reloadVouchers();
         });
     }
   }
@@ -203,6 +252,7 @@ export default {
   width: 100%;
   top: 0;
   z-index: 0;
+  transition: 0.3s;
 }
 .scroll-area {
   position: relative;
