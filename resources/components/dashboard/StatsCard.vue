@@ -3,7 +3,11 @@
     <v-card class="mt-4 pa-0" style="height: 133px">
       <v-layout row wrap ml-2 pr-3>
         <v-flex shrink>
-          <v-sheet class="offset-t-4" :color="color" elevation="12">
+          <v-sheet
+            :class="{'offset-t-4':$vuetify.breakpoint.smAndUp}"
+            :color="color"
+            elevation="12"
+          >
             <slot name="icon">
               <v-icon dark size="40" class="ma-3">{{ icon }}</v-icon>
             </slot>
