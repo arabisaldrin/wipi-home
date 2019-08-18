@@ -2,7 +2,10 @@
   <div>
     <v-container grid-list-md py-0 class="page">
       <div class="page-title mb-3 layout align-center py-2 wrap">
-        <span class="display-1 white--text">
+        <span
+          class="white--text text"
+          :style="`margin-left : ${scrollOffset}px;opacity : ${scrollOffset-10 >= 40 ? '0' : '1'};font-size : calc(40px - ${scrollOffset * .5}px)`"
+        >
           <slot name="title">{{title}}</slot>
         </span>
         <v-divider vertical inset class="mx-3"></v-divider>
@@ -49,8 +52,9 @@ export default {
   },
   data() {
     return {
-      visibleoffset: 40,
+      visibleoffset: 42,
       visibleoffsetbottom: 0,
+      scrollOffset: 0,
       scrolling: false
     };
   },
@@ -78,6 +82,11 @@ export default {
   },
   methods: {
     catchScroll() {
+      if (window.pageYOffset - 5 <= this.visibleoffset) {
+        this.scrollOffset = window.pageYOffset;
+      } else {
+        this.scrollOffset = 40;
+      }
       const pastTopOffset = window.pageYOffset > parseInt(this.visibleoffset);
       const pastBottomOffset =
         window.innerHeight + window.pageYOffset >=
@@ -101,6 +110,11 @@ export default {
   position: inherit;
   &-title {
     position: relative;
+    .text {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 20px;
+    }
   }
 }
 </style>
