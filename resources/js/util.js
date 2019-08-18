@@ -1,6 +1,6 @@
 import clone from 'lodash.clone';
 
-export const requestIndex = async (api, { state, commit }, _options) => {
+export const requestIndex = async (api, { state, commit }, _options, transform = e => e) => {
 	state.loading = true;
 	let options = clone(_options || state.options);
 	if (options) {
@@ -10,7 +10,10 @@ export const requestIndex = async (api, { state, commit }, _options) => {
 	const { data } = await axios.get(api, {
 		params: options
 	});
-	commit('set', data.data || data);
-	commit('total', data.total || data.length);
+
+	const items = data.data ? transform(data.data) : transform(data);
+
+	commit('set', items);
+	commit('total', data.total || items.length);
 	state.loading = false;
 };
