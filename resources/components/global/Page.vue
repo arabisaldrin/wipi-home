@@ -2,10 +2,7 @@
   <div>
     <v-container grid-list-md py-0 class="page">
       <div class="page-title mb-3 layout align-center py-2 wrap">
-        <span
-          class="white--text text"
-          :style="`margin-left : ${scrollOffset}px;opacity : ${scrollOffset-10 >= 40 ? '0' : '1'};font-size : calc(40px - ${scrollOffset * .5}px)`"
-        >
+        <span class="white--text text display-1">
           <slot name="title">{{title}}</slot>
         </span>
         <v-divider vertical inset class="mx-3"></v-divider>
@@ -52,7 +49,7 @@ export default {
   },
   data() {
     return {
-      visibleoffset: 42,
+      visibleoffset: 10,
       visibleoffsetbottom: 0,
       scrollOffset: 0,
       scrolling: false
