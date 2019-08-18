@@ -1,5 +1,3 @@
-import { requestIndex } from '@/js/util';
-
 export default {
 	namespaced: true,
 	state: {
