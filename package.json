@@ -27,6 +27,7 @@
         "lodash.clone": "^4.5.0",
         "lodash.find": "^4.6.0",
         "lodash.findindex": "^4.6.0",
+        "lodash.lowerfirst": "^4.3.1",
         "lodash.upperfirst": "^4.3.1",
         "portal-vue": "^2.1.5",
         "pusher-js": "^5.0.0",
@@ -44,7 +45,7 @@
         "vue-router": "^3.0.3",
         "vue-router-layout": "^0.1.4",
         "vue-template-compiler": "^2.6.10",
-        "vuetify": "^2.0.0",
+        "vuetify": "^2.0.7",
         "vuex": "^3.0.1"
     }
 }
