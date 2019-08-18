@@ -1,36 +1,13 @@
-import { requestIndex } from '@/js/util';
+import _crud from '../_crud';
 
-export default {
-	namespaced: true,
-	state: {
-		lists: [],
-		options: {},
-		totalGroups: 0
-	},
-	getters: {
-		find(_) {
-			return async id => {
-				return (await axios.get(`/voucher-groups/${id}`)).data;
-			};
-		}
-	},
-	mutations: {
-		set(state, lists) {
-			state.lists.splice(0, state.lists.length, ...lists);
-		},
-		total(state, total) {
-			state.totalGroups = total;
-		}
-	},
+export default _crud('voucher-groups', {
 	actions: {
-		async fetch(ctx, options) {
-			requestIndex('/voucher-groups', ctx, options);
-		},
-		async archive({ dispatch }, groups) {
-			await axios.post(`/voucher-groups/archive`, {
-				groups: groups.map(e => e.id)
+		async archive({ state }, { group_id, archive = true }) {
+			const { data } = await axios.post(`/voucher-groups/${group_id}/archive`, {
+				archive
 			});
-			dispatch('fetch');
+			const updateIndex = state.lists.findIndex(e => e.id == group_id);
+			state.lists.splice(updateIndex, 1, data);
 		}
 	}
-};
+});
