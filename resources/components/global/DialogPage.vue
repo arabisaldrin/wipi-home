@@ -10,20 +10,25 @@
         </v-btn>
         <slot slot="extension" name="extension"></slot>
       </v-toolbar>
-      <v-card-text class="pb-0">
+      <v-card-text class="pb-0 pt-2">
         <v-container grid-list-md pa-0 fluid>
-          <v-form @submit.prevent="$emit('accept')">
+          <v-form @submit.prevent="accept(close)">
             <slot></slot>
           </v-form>
         </v-container>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <slot
-          name="actions"
-          v-bind:close="() => show = false"
-          v-bind:accept="(cb) => $emit('accept',cb)"
-        ></slot>
+        <slot name="actions" v-bind="{accept,close}">
+          <slot name="actions.close" v-bind="{on : {click : close}}">
+            <v-btn text class="mx-1" @click="close">Cancel</v-btn>
+          </slot>
+          <slot name="actions.accept" v-bind="{on : {click : accept}}">
+            <v-btn outlined color="primary" class="mx-1" @click="accept(close)">
+              <v-icon left>mdi-check</v-icon>Save
+            </v-btn>
+          </slot>
+        </slot>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -58,6 +63,14 @@ export default {
   },
   mounted() {
     this.show = true;
+  },
+  methods: {
+    accept(cb) {
+      this.$emit("accept", cb);
+    },
+    close() {
+      this.show = false;
+    }
   },
   watch: {
     show(val) {
