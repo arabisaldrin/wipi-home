@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/me', function (Request $request) {
         return $request->user();
     });
+    Route::post('/voucher-groups/{voucher_group}/archive', 'VoucherGroupController@archive')
+        ->name('voucher-groups.archive');
 
     Route::prefix('dashboard')->group(function () {
         Route::get('/user-count', 'AnalyticsController@userCount');
@@ -32,17 +34,15 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::apiResources([
-        '/users' => 'UserController',
-        '/vouchers' => 'VoucherController',
-        '/plans' => 'PlanController',
+        'users' => 'UserController',
+        'vouchers' => 'VoucherController',
+        'plans' => 'PlanController',
+        'voucher-groups' => 'VoucherGroupController',
     ]);
 
     Route::get('notifications/unread', 'NotificationController@unreadCount');
     Route::post('notifications/{notification}/read', 'NotificationController@markAdRead');
     Route::apiResource('notifications', 'NotificationController')->only('index', 'show', 'destroy');
-
-    Route::get('/voucher-groups', 'VoucherController@groups');
-    Route::post('/voucher-groups/archive', 'VoucherController@archive');
 
     Route::put('/users/{user}/toggle-status', 'UserController@toggleStatus');
 
