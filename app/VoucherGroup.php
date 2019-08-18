@@ -17,4 +17,9 @@ class VoucherGroup extends Model
     {
         return $this->belongsTo(Plan::class);
     }
+
+    public function vouchers()
+    {
+        return $this->hasMany(Voucher::class, 'group_id', 'id');
+    }
 }
