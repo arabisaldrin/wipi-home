@@ -14,21 +14,15 @@
     </template>
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-layout column wrap>
-          <v-flex>
-            <v-text-field
-              v-model.number="formData.code"
-              v-validate="'required'"
-              :error-messages="errors.collect('Code')"
-              name="Code"
-              label="Code"
-              prepend-inner-icon="mdi-code-array"
-            ></v-text-field>
-          </v-flex>
-          <v-flex>
-            <v-textarea v-model="formData.description" rows="3" label="Description"></v-textarea>
-          </v-flex>
-        </v-layout>
+        <v-text-field
+          v-model.number="formData.code"
+          v-validate="'required'"
+          :error-messages="errors.collect('Code')"
+          name="Code"
+          label="Code"
+          prepend-inner-icon="mdi-code-array"
+        ></v-text-field>
+        <v-textarea v-model="formData.description" rows="3" label="Description"></v-textarea>
       </v-tab-item>
       <v-tab-item>
         <v-alert type="info" class="pa-2" :value="true">All fields are optional</v-alert>
