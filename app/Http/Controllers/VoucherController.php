@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VoucherGroupAdded;
 use App\Voucher;
 use App\VoucherGroup;
 use Illuminate\Http\Request;
@@ -17,11 +18,9 @@ class VoucherController extends Controller
     public function index(Request $request)
     {
         $builder = Voucher::query();
-        $filter = json_decode($request->filter);
-        if ($filter) {
-            if ($filter->group_id) {
-                $builder->where('group_id', $filter->group_id);
-            }
+        $filters = json_decode($request->filters);
+        if ($filters && $filters->group_id) {
+            $builder->where('group_id', $filters->group_id);
         }
         $builder->orderBy('created_at', 'DESC');
 
@@ -52,6 +51,8 @@ class VoucherController extends Controller
         }
 
         Voucher::insert($vouchers);
+
+        broadcast(new VoucherGroupAdded($request->user()))->toOthers();
 
         return $vouchers;
     }
@@ -102,22 +103,5 @@ class VoucherController extends Controller
     {
         $voucher->is_active = 0;
         $voucher->save();
-    }
-
-    public function groups(Request $request)
-    {
-        return VoucherGroup::all();
-    }
-
-    public function archive(Request $request)
-    {
-        $groups = VoucherGroup::whereIn('id', $request->groups);
-        $groups->update([
-            'archived_at' => Carbon::now(),
-        ]);
-
-        Voucher::whereIn('group_id', $request->groups)->update([
-            'is_active' => 0,
-        ]);
     }
 }
