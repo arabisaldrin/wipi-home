@@ -1,22 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import users from './modules/users';
-import vouchers from './modules/vouchers';
-import voucherGroups from './modules/voucher-groups';
-import notifications from './modules/notifications';
-import plans from './modules/plans';
 import VueCookie from 'vue-cookie';
+import modules from './modules'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-	modules: {
-		users,
-		vouchers,
-		voucherGroups,
-		notifications,
-		plans
-	},
+	modules: modules,
 	state: {
 		page: {},
 		dark: false,
