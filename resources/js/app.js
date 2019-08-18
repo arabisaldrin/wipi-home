@@ -11,13 +11,13 @@ import PortalVue from 'portal-vue';
 import VeeValidate from 'vee-validate';
 import VueMoment from 'vue-moment';
 import VueCookie from 'vue-cookie';
-import Echo from 'laravel-echo';
 
 import router from './router';
 import vuetify from '@/plugins/vuetify';
 import store from '@/store/index';
 import i18n from '@/i18n';
 
+import '@/plugins/inject';
 import '@/components/global';
 import '@/assets/style/app.scss';
 
