@@ -13,8 +13,8 @@
         <v-card>
           <v-data-table
             :headers="headers"
-            :items="users"
-            :server-items-length="totalUser"
+            :items="items"
+            :server-items-length="totalItems"
             :options.sync="options"
             item-key="id"
           >
@@ -47,7 +47,7 @@
                   dark
                 >{{item.is_active? 'mdi-account-off-outline' : 'mdi-account-check-outline'}}</v-icon>
               </v-btn>
-              <v-btn x-small fab dark color="red" @click="removeUser(item.id)">
+              <v-btn x-small fab dark color="red" @click="remove(item.id)">
                 <v-icon small dark>mdi-trash-can</v-icon>
               </v-btn>
             </template>
@@ -61,7 +61,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import tableMixin from "@/js/mixins/table-mixin";
 export default {
+  mixins: [tableMixin("users")],
   data() {
     return {
       headers: [
@@ -90,32 +92,13 @@ export default {
           value: "actions",
           width: "150px"
         }
-      ],
-      options: {
-        rowsPerPage: 10
-      }
+      ]
     };
-  },
-  computed: {
-    ...mapState({
-      users: s => s.users.lists,
-      totalUser: s => s.users.total
-    })
   },
   methods: {
     ...mapActions({
-      getUsers: "users/fetch",
-      toggleStatus: "users/toggleStatus",
-      removeUser: "users/remove"
+      toggleStatus: "users/toggleStatus"
     })
-  },
-  watch: {
-    options: {
-      deep: true,
-      handler: async function(val) {
-        await this.getUsers(val);
-      }
-    }
   }
 };
 </script>
