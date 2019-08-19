@@ -40,14 +40,14 @@
                 dark
                 class="mx-1"
                 :color="item.is_active ? 'red' : 'green'"
-                @click="toggleStatus(item.id)"
+                @click="confirmAndToggleStatus(item)"
               >
                 <v-icon
                   small
                   dark
                 >{{item.is_active? 'mdi-account-off-outline' : 'mdi-account-check-outline'}}</v-icon>
               </v-btn>
-              <v-btn x-small fab dark color="red" @click="remove(item.id)">
+              <v-btn x-small fab dark color="red" @click="confirmAndRemove(item)">
                 <v-icon small dark>mdi-trash-can</v-icon>
               </v-btn>
             </template>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 import tableMixin from "@/js/mixins/table-mixin";
 export default {
   mixins: [tableMixin("users")],
@@ -98,7 +98,46 @@ export default {
   methods: {
     ...mapActions({
       toggleStatus: "users/toggleStatus"
-    })
+    }),
+    async confirmAndRemove(user) {
+      const confirmed = await this.$confirm(
+        "Are you sure you want to remove the user?",
+        {
+          title: "Confirm Deletion",
+          onStop: () => {}
+        }
+      );
+      if (confirmed) {
+        try {
+          await this.remove(user.id);
+          this.$toast.success(this.$t("toast.success", ["User", "removed"]));
+        } catch (error) {
+          const { status } = error.response;
+          this.$toast.error(this.$t("toast.error", ["remove", "User"]));
+        }
+      }
+    },
+    async confirmAndToggleStatus(user) {
+      const action = user.is_active ? "Deactivate" : "Activate";
+      const confirmed = await this.$confirm(
+        `Are you sure you want to ${action} the user?`,
+        {
+          title: "Confirm Action",
+          onStop: () => {}
+        }
+      );
+      if (confirmed) {
+        try {
+          await this.toggleStatus(user.id);
+          this.$toast.success(
+            this.$t("toast.success", ["User", action + "ed"])
+          );
+        } catch (error) {
+          const { status } = error.response;
+          this.$toast.error(this.$t("toast.error", ["deactivate", "User"]));
+        }
+      }
+    }
   }
 };
 </script>
