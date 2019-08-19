@@ -3,7 +3,7 @@
     <v-container grid-list-md py-0 class="page">
       <div class="page-title mb-3 layout align-center py-2 wrap">
         <span class="white--text text display-1">
-          <slot name="title">{{title}}</slot>
+          <slot name="title" v-bind="{title}">{{title}}</slot>
         </span>
         <v-divider vertical inset class="mx-3"></v-divider>
         <slot name="tools"></slot>
