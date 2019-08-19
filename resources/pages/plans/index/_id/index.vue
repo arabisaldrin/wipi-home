@@ -128,12 +128,18 @@ export default {
     async save(close) {
       const valid = await this.$validator.validateAll();
       if (valid) {
-        await this.updatePlan(this.formData);
-        close();
+        try {
+          await this.update(this.formData);
+          this.$toast.success(this.$t("toast.success", ["Plan", "updated"]));
+          close();
+        } catch (error) {
+          console.log(error);
+          this.$toast.error(this.$t("toast.error", ["update", "Plan"]));
+        }
       }
     },
     ...mapActions({
-      updatePlan: "plans/update"
+      update: "plans/update"
     })
   }
 };
