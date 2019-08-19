@@ -12,17 +12,17 @@
       <v-layout column>
         <v-card>
           <v-data-table
-            v-model="selecetd"
             :headers="headers"
-            :items="plans"
+            :items="items"
             :options.sync="options"
+            :server-items-length="totalItems"
             item-key="id"
           >
             <template v-slot:item.actions="{item}">
               <v-btn x-small fab dark color="primary" class="mr-1" :to="`${item.id}`" append>
                 <v-icon small dark>mdi-pencil</v-icon>
               </v-btn>
-              <v-btn x-small fab dark color="red" class="mr-1" @click="deleteItem(item)">
+              <v-btn x-small fab dark color="red" class="mr-1" @click="confirmAndRemove(item)">
                 <v-icon small dark>mdi-trash-can</v-icon>
               </v-btn>
             </template>
@@ -35,14 +35,11 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import tableMixin from "../../js/mixins/table-mixin";
 export default {
+  mixins: [tableMixin("plans")],
   data() {
     return {
-      options: {
-        rowsPerPage: 10
-      },
-      selecetd: [],
       headers: [
         {
           text: "Code",
@@ -66,25 +63,23 @@ export default {
       ]
     };
   },
-  computed: {
-    ...mapState({
-      plans: s => s.plans.lists
-    })
-  },
   methods: {
-    async deleteItem(plan) {
-      this.deletePlan(plan.id);
-    },
-    ...mapActions({
-      getPlans: "plans/fetch",
-      deletePlan: "plans/remove"
-    })
-  },
-  watch: {
-    options: {
-      deep: true,
-      handler: async function(val) {
-        await this.getPlans(val);
+    async confirmAndRemove(plan) {
+      const confirmed = await this.$confirm(
+        "Are you sure you want to remove the plan?",
+        {
+          title: "Confirm Deletion",
+          onStop: () => {}
+        }
+      );
+      if (confirmed) {
+        try {
+          await this.remove(plan.id);
+          this.$toast.success(this.$t("toast.success", ["Plan", "removed"]));
+        } catch (error) {
+          const { status } = error.response;
+          this.$toast.error(this.$t("toast.error", ["remove", "Plan"]));
+        }
       }
     }
   }
