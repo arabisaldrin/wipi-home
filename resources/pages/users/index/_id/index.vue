@@ -192,9 +192,15 @@ export default {
     async save(close) {
       const valid = await this.$validator.validateAll();
       if (valid) {
-        this.loading = true;
-        await this.updateUser(this.formData);
-        close();
+        try {
+          this.loading = true;
+          await this.updateUser(this.formData);
+          this.$toast.success("toast.success", ["User", "updated"]);
+          close();
+        } catch (error) {
+          console.log(error);
+          this.$toast.success(this.$t("toast.error"), ["udpate", "User"]);
+        }
       }
     }
   }
