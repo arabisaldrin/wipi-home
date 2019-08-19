@@ -26,7 +26,7 @@
     </template>
     <template slot="icon">
       <div class="icon-overlay">
-        <v-icon small class="absolute">mdi-upload</v-icon>
+        <v-icon small dark class="absolute">mdi-upload</v-icon>
       </div>
       <v-icon dark size="40" class="ma-3">{{loading ? 'mdi-loading mdi-spin' : 'mdi-chart-donut'}}</v-icon>
     </template>
