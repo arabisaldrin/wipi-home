@@ -53,8 +53,8 @@
       </v-btn>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" app>
-      <v-fade-transition>
-        <div class="layout justify-center py-2 align-center" v-show="drawer && !miniVariant">
+      <router-link to="/">
+        <div class="layout justify-center py-2 align-center" v-if="drawer && !miniVariant">
           <div class="d-flex align-baseline">
             wi
             <span class="display-1">Pi</span>
@@ -63,8 +63,10 @@
             <v-icon>mdi-wifi mdi-rotate-45</v-icon>
           </div>
         </div>
-      </v-fade-transition>
-
+        <v-layout v-else row wrap align-center justify-center pa-2>
+          <v-icon large color="primary">mdi-home-outline</v-icon>
+        </v-layout>
+      </router-link>
       <v-divider></v-divider>
       <v-list dense class="pt-0">
         <template v-for="item in menu">
@@ -104,15 +106,11 @@
         </template>
       </v-list>
     </v-navigation-drawer>
+    <div class="material-panel-header" :class="page.scheme" :style="`height : ${page.panelHeight}`"></div>
     <v-content>
-      <div
-        class="material-panel-header"
-        :class="page.scheme"
-        :style="`height : ${page.panelHeight}`"
-      ></div>
       <transition
-        :name="transitionName"
         mode="out-in"
+        :name="transitionName"
         @beforeLeave="beforeLeave"
         @enter="enter"
         @afterEnter="afterEnter"
