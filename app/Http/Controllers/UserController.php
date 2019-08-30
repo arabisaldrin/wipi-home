@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $builder = User::with('devices');
+        $builder = User::with('devices', 'plan');
         return Pagination::paginate($builder, $request);
     }
 
