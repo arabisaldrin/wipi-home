@@ -149,10 +149,10 @@ export default {
       if (confirmed) {
         try {
           await this.remove(group.id);
-          this.$toast.success(this.$t("group.success", ["removed"]));
+          this.$toast.success(this.$t("toast.success", ["Group", "removed"]));
         } catch (error) {
           const { status } = error.response;
-          this.$toast.error(this.$t("group.remove.failed", { status }));
+          this.$toast.error(this.$t("toast.eror", ["remove", "Group"]));
         }
       }
     },
