@@ -1,11 +1,11 @@
 <template>
   <page title="Users" scheme="teal">
     <template slot="tools">
-      <v-btn fab small color="primary" to="add" append>
-        <v-icon>mdi-plus</v-icon>
+      <v-btn fab small dark color="primary" to="add" append>
+        <v-icon color="white">mdi-plus</v-icon>
       </v-btn>
       <v-btn fab small dark color="green" class="ml-2">
-        <v-icon>mdi-printer</v-icon>
+        <v-icon color="white">mdi-printer</v-icon>
       </v-btn>
     </template>
     <v-container grid-list-md>
@@ -32,7 +32,7 @@
                 :to="`${item.id}`"
                 append
               >
-                <v-icon small dark>mdi-pencil</v-icon>
+                <v-icon small color="white">mdi-pencil</v-icon>
               </v-btn>
               <v-btn
                 x-small
@@ -84,8 +84,8 @@ export default {
           value: "plan.code"
         },
         {
-          text: "Status",
-          value: "syayis"
+          text: "Active",
+          value: "status"
         },
         {
           text: "",
