@@ -1,8 +1,6 @@
 export default {
-	group: {
-		remove: {
-			success: 'Group has been successfully removed',
-			failed: 'err {status} : Some error occurred while trying to remove the voucher group'
-		}
+	toast: {
+		success: '{0} has been successfully {1}',
+		error: 'Some error occurred while trying to {0} {1} '
 	}
 };
