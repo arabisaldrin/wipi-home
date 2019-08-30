@@ -61,7 +61,7 @@
     </v-flex>
     <v-dialog v-model="loading" persistent max-width="min-content" transition="dialog-transition">
       <v-card>
-        <v-card-text>
+        <v-card-text class="pt-3">
           <v-progress-circular color="primary" indeterminate></v-progress-circular>
         </v-card-text>
       </v-card>
